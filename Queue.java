@@ -37,7 +37,7 @@ public class Queue {
 			process.setTT(Driver.total_time);
 			
 			System.out.println("Process: " + process.getID() + " has just finished! "
-					+ "Its RT was: " + process.getRT() + " and its TT was: ");
+					+ "Its RT was: " + process.getRT() + " and its TT was: " + process.getTT());
 			
 			queue.remove(process);
 			

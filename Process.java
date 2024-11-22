@@ -12,10 +12,11 @@ public class Process {
     private int returnTime = 0;
     private int queueNum = 3;
     private static final int timeSlice = 10; // Default time slice
-    private static final int allotMax = 3 * timeSlice; // Max allotment time
-    private static final int resetTime = 32 * timeSlice;
+    private static final int allotMax = 1 * timeSlice ; // Max allotment time
+    private static final int resetTime = 50 * timeSlice;
     private int startTime = -1; // Start time of the job, initially not set.
     private int completionTime = -1; // Completion time, initially not set.
+    private boolean hasStarted = false; // Track if process has started executing
 
     public Process() {
         jobID = ID++;
@@ -31,20 +32,34 @@ public class Process {
         tickets = (int) (Math.random() * (maxTickets - minTickets)) + minTickets;
     }
 
+    public void executeProcess(int time) {
+        // Set return time only on first execution
+        if (!hasStarted) {
+            this.returnTime = startTime - arrivalTime;
+            hasStarted = true;
+        }
+        
+        jobLength -= time;
+        if (jobLength < 0) {
+            jobLength = 0;
+        }
+    }
+
+    public void startProcess(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public void completeProcess(int completionTime) {
+        this.completionTime = completionTime;
+    }
+
+    // Getters and setters
     public int getJobLength() {
         return jobLength;
     }
 
-    public void setJobLength(int jLength) {
-        jobLength = jLength;
-    }
-
     public int getTickets() {
         return tickets;
-    }
-
-    public void setTickets(int num) {
-        tickets = num;
     }
 
     public int getAllotmentCount() {
@@ -61,14 +76,6 @@ public class Process {
 
     public int getArrivalTime() {
         return arrivalTime;
-    }
-
-    public void setArrivalTime(int start) {
-        arrivalTime = start;
-    }
-
-    public void setFinishOrder(int order) {
-        // No-op: Replace or implement tracking as necessary
     }
 
     public int getQueueNum() {
@@ -91,60 +98,28 @@ public class Process {
         return resetTime;
     }
 
-    public void printProcess() {
-        System.out.println("Process: " + jobID + " Turn Around Time: " + turnAroundTime + " Return Time: " + returnTime);
-    }
-
-    // Return the current return time of the process
     public int getReturnTime() {
         return returnTime;
     }
 
-    // Set the return time
     public void setReturnTime(int returnTime) {
         this.returnTime = returnTime;
     }
 
-    // Return the current turnaround time of the process
     public int getTurnAroundTime() {
         return turnAroundTime;
     }
 
-    // Set the turnaround time
     public void setTurnAroundTime(int turnAroundTime) {
         this.turnAroundTime = turnAroundTime;
     }
 
-    // Return remaining time for the job
     public int getRemainingTime() {
         return jobLength;
     }
 
-    // Execute the process for a given time slice, reduce job length
-    public void executeProcess(int time) {
-        jobLength -= time;
-        if (jobLength < 0) {
-            jobLength = 0;
-        }
-    }
-
-    // Check if the process is completed
     public boolean isCompleted() {
         return jobLength == 0;
-    }
-
-    // Start the process, update start time
-    public void startProcess(int startTime) {
-        this.startTime = startTime;
-        // Set return time once the process starts
-        this.returnTime = startTime - arrivalTime;
-    }
-
-    // Set the completion time of the process
-    public void completeProcess(int completionTime) {
-        this.completionTime = completionTime;
-        // Calculate turnaround time once the process is complete
-        this.turnAroundTime = completionTime - arrivalTime;
     }
 
     public char jobID() {
@@ -153,6 +128,10 @@ public class Process {
 
     public int getStartTime() {
         return startTime;
+    }
+
+    public void setFinishOrder(int order) {
+        // Optional: Implement if needed for tracking
     }
 
     public int getCompletionTime() {

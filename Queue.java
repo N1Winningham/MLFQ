@@ -20,10 +20,10 @@ public class Queue {
 	public void runProcess(Process process, List<Queue> queues) {	
 		
 		//Used for RT;
-				if (!process.hasRun) {
-					process.setRT(Driver.total_time);
-					process.hasRun = true;
-				}
+		if (!process.hasRun) {
+			process.setRT(Driver.total_time);
+			process.hasRun = true;
+		}
 				
 		timeSlice(process);		
 		//System.out.println("Time Slice for Process: " + process.getID() + " from Queue has just finished!");		
@@ -78,6 +78,8 @@ public class Queue {
 			process.setJobLength(process.getJobLength() - Driver.time_slice);
 			//System.out.println("Job Length after time_slice:" + process.getJobLength());
 		}
+		queue.remove(process);
+		queue.add(process);
 	}
 	public void allotment(Process process) {
 		

@@ -18,13 +18,6 @@ public class Process {
     private int completionTime = -1; // Completion time, initially not set.
     private boolean hasStarted = false; // Track if process has started executing
 
-    public Process() {
-        jobID = ID++;
-        jobLength = 30;
-        tickets = 50;
-        arrivalTime = 0;
-    }
-
     public Process(int minLength, int maxLength, int earliestArrival, int latestArrival, int minTickets, int maxTickets) {
         jobID = ID++;
         jobLength = 10 * ((int) (Math.random() * ((maxLength / 10) - (minLength / 10))) + (minLength / 10));
